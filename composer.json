@@ -1,0 +1,33 @@
+{
+	"name": "sop/crypto-bridge",
+	"description": "A PHP library providing cryptography support for various PKCS applications.",
+	"homepage": "https://github.com/sop/crypto-bridge",
+	"license": "MIT",
+	"type": "library",
+	"keywords": [
+		"pkcs",
+		"cryptography",
+		"encrypt",
+		"decrypt",
+		"sign",
+		"verify"
+	],
+	"authors": [
+		{
+			"name": "Joni Eskelinen",
+			"email": "jonieske@gmail.com",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.6.3",
+		"ext-openssl": "*",
+		"sop/crypto-types": "dev-master"
+	},
+	"minimum-stability": "dev",
+	"autoload": {
+		"psr-4": {
+			"Sop\\CryptoBridge\\" : "lib/CryptoBridge"
+		}
+	}
+}
