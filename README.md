@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/sop/crypto-bridge.svg?branch=master)](https://travis-ci.org/sop/crypto-bridge)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sop/crypto-bridge/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sop/crypto-bridge/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/sop/crypto-bridge/badge.svg?branch=master)](https://coveralls.io/github/sop/crypto-bridge?branch=master)
+[![License](https://poser.pugx.org/sop/crypto-bridge/license)](https://github.com/sop/crypto-bridge/blob/master/LICENSE)
+
 # CryptoBridge
 
 A PHP library providing cryptography support for various PKCS applications.
