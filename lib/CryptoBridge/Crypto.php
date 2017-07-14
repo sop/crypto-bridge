@@ -73,6 +73,8 @@ abstract class Crypto
         if (defined("OPENSSL_VERSION_NUMBER")) {
             return new Crypto\OpenSSLCrypto();
         }
+        // @codeCoverageIgnoreStart
         throw new \RuntimeException("No crypto implementation available.");
+        // @codeCoverageIgnoreEnd
     }
 }
