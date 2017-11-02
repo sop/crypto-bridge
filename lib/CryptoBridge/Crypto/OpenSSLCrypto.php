@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sop\CryptoBridge\Crypto;
 
 use Sop\CryptoBridge\Crypto;

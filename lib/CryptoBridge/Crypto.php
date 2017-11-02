@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sop\CryptoBridge;
 
 use Sop\CryptoTypes\AlgorithmIdentifier\Cipher\CipherAlgorithmIdentifier;
