@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Sop\CryptoBridge\Crypto;
 
@@ -24,8 +24,8 @@ class OpenSSLCrypto extends Crypto
      * {@inheritdoc}
      *
      */
-    public function sign($data, PrivateKeyInfo $privkey_info,
-        SignatureAlgorithmIdentifier $algo)
+    public function sign(string $data, PrivateKeyInfo $privkey_info,
+        SignatureAlgorithmIdentifier $algo): Signature
     {
         $this->_checkSignatureAlgoAndKey($algo,
             $privkey_info->algorithmIdentifier());
@@ -43,8 +43,8 @@ class OpenSSLCrypto extends Crypto
      * {@inheritdoc}
      *
      */
-    public function verify($data, Signature $signature,
-        PublicKeyInfo $pubkey_info, SignatureAlgorithmIdentifier $algo)
+    public function verify(string $data, Signature $signature,
+        PublicKeyInfo $pubkey_info, SignatureAlgorithmIdentifier $algo): bool
     {
         $this->_checkSignatureAlgoAndKey($algo,
             $pubkey_info->algorithmIdentifier());
@@ -62,7 +62,8 @@ class OpenSSLCrypto extends Crypto
      * {@inheritdoc}
      *
      */
-    public function encrypt($data, $key, CipherAlgorithmIdentifier $algo)
+    public function encrypt(string $data, string $key,
+        CipherAlgorithmIdentifier $algo): string
     {
         $this->_checkCipherKeySize($algo, $key);
         $iv = $algo->initializationVector();
@@ -80,7 +81,8 @@ class OpenSSLCrypto extends Crypto
      * {@inheritdoc}
      *
      */
-    public function decrypt($data, $key, CipherAlgorithmIdentifier $algo)
+    public function decrypt(string $data, string $key,
+        CipherAlgorithmIdentifier $algo): string
     {
         $this->_checkCipherKeySize($algo, $key);
         $iv = $algo->initializationVector();
@@ -100,7 +102,8 @@ class OpenSSLCrypto extends Crypto
      * @param string $key
      * @throws \UnexpectedValueException
      */
-    protected function _checkCipherKeySize(CipherAlgorithmIdentifier $algo, $key)
+    protected function _checkCipherKeySize(CipherAlgorithmIdentifier $algo,
+        string $key)
     {
         if ($algo instanceof BlockCipherAlgorithmIdentifier) {
             if (strlen($key) != $algo->keySize()) {
@@ -175,7 +178,7 @@ class OpenSSLCrypto extends Crypto
      * @throws \UnexpectedValueException
      * @return string
      */
-    protected function _algoToDigest(SignatureAlgorithmIdentifier $algo)
+    protected function _algoToDigest(SignatureAlgorithmIdentifier $algo): string
     {
         $oid = $algo->oid();
         if (!array_key_exists($oid, self::MAP_DIGEST_OID_TO_NAME)) {
@@ -209,7 +212,7 @@ class OpenSSLCrypto extends Crypto
      * @throws \UnexpectedValueException
      * @return string
      */
-    protected function _algoToCipher(CipherAlgorithmIdentifier $algo)
+    protected function _algoToCipher(CipherAlgorithmIdentifier $algo): string
     {
         $oid = $algo->oid();
         if (array_key_exists($oid, self::MAP_CIPHER_OID_TO_NAME)) {
@@ -232,7 +235,7 @@ class OpenSSLCrypto extends Crypto
      * @throws \UnexpectedValueException
      * @return string
      */
-    protected function _rc2AlgoToCipher(RC2CBCAlgorithmIdentifier $algo)
+    protected function _rc2AlgoToCipher(RC2CBCAlgorithmIdentifier $algo): string
     {
         switch ($algo->effectiveKeyBits()) {
             case 128:

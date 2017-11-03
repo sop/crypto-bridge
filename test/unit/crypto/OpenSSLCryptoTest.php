@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 use Sop\CryptoBridge\Crypto\OpenSSLCrypto;
 use Sop\CryptoEncoding\PEM;
@@ -334,7 +334,7 @@ class OpenSSLCryptoTest extends PHPUnit_Framework_TestCase
 
 class OpenSSLCryptoTest_SHA1WithRSAAsEC extends SHA1WithRSAEncryptionAlgorithmIdentifier
 {
-    public function supportsKeyAlgorithm(AlgorithmIdentifier $algo)
+    public function supportsKeyAlgorithm(AlgorithmIdentifier $algo): bool
     {
         return true;
     }
@@ -346,15 +346,15 @@ class OpenSSLCryptoTest_UnsupportedCipher extends CipherAlgorithmIdentifier
     {
         $this->_oid = "1.3.6.1.3";
     }
-    public function name()
+    public function name(): string
     {
         return "";
     }
-    public function keySize()
+    public function keySize(): int
     {
         return 1;
     }
-    public function ivSize()
+    public function ivSize(): int
     {
         return 1;
     }
@@ -370,15 +370,15 @@ class OpenSSLCryptoTest_InvalidRC2 extends CipherAlgorithmIdentifier
     {
         $this->_oid = AlgorithmIdentifier::OID_RC2_CBC;
     }
-    public function name()
+    public function name(): string
     {
         return "";
     }
-    public function keySize()
+    public function keySize(): int
     {
         return 1;
     }
-    public function ivSize()
+    public function ivSize(): int
     {
         return 1;
     }
