@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types = 1);
 
 namespace Sop\CryptoBridge\Crypto;
@@ -33,7 +32,7 @@ class OpenSSLCrypto extends Crypto
             $this->_algoToDigest($algo));
         if (false === $result) {
             throw new \RuntimeException(
-                "openssl_sign() failed: " . $this->_getLastError());
+                'openssl_sign() failed: ' . $this->_getLastError());
         }
         return Signature::fromSignatureData($signature, $algo);
     }
@@ -52,7 +51,7 @@ class OpenSSLCrypto extends Crypto
             $pubkey_info->toPEM(), $this->_algoToDigest($algo));
         if (-1 == $result) {
             throw new \RuntimeException(
-                "openssl_verify() failed: " . $this->_getLastError());
+                'openssl_verify() failed: ' . $this->_getLastError());
         }
         return 1 == $result ? true : false;
     }
@@ -71,7 +70,7 @@ class OpenSSLCrypto extends Crypto
             OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv);
         if (false === $result) {
             throw new \RuntimeException(
-                "openssl_encrypt() failed: " . $this->_getLastError());
+                'openssl_encrypt() failed: ' . $this->_getLastError());
         }
         return $result;
     }
@@ -90,7 +89,7 @@ class OpenSSLCrypto extends Crypto
             OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv);
         if (false === $result) {
             throw new \RuntimeException(
-                "openssl_decrypt() failed: " . $this->_getLastError());
+                'openssl_decrypt() failed: ' . $this->_getLastError());
         }
         return $result;
     }
@@ -108,7 +107,7 @@ class OpenSSLCrypto extends Crypto
         if ($algo instanceof BlockCipherAlgorithmIdentifier) {
             if (strlen($key) != $algo->keySize()) {
                 throw new \UnexpectedValueException(
-                    sprintf("Key length for %s must be %d, %d given.",
+                    sprintf('Key length for %s must be %d, %d given.',
                         $algo->name(), $algo->keySize(), strlen($key)));
             }
         }
@@ -142,7 +141,7 @@ class OpenSSLCrypto extends Crypto
         if (!$sig_algo->supportsKeyAlgorithm($key_algo)) {
             throw new \UnexpectedValueException(
                 sprintf(
-                    "Signature algorithm %s does not support key algorithm %s.",
+                    'Signature algorithm %s does not support key algorithm %s.',
                     $sig_algo->name(), $key_algo->name()));
         }
     }
@@ -156,18 +155,18 @@ class OpenSSLCrypto extends Crypto
      */
     const MAP_DIGEST_OID_TO_NAME = array(
         /* @formatter:off */
-        AlgorithmIdentifier::OID_MD4_WITH_RSA_ENCRYPTION => "md4WithRSAEncryption",
-        AlgorithmIdentifier::OID_MD5_WITH_RSA_ENCRYPTION => "md5WithRSAEncryption",
-        AlgorithmIdentifier::OID_SHA1_WITH_RSA_ENCRYPTION => "sha1WithRSAEncryption",
-        AlgorithmIdentifier::OID_SHA224_WITH_RSA_ENCRYPTION => "sha224WithRSAEncryption",
-        AlgorithmIdentifier::OID_SHA256_WITH_RSA_ENCRYPTION => "sha256WithRSAEncryption",
-        AlgorithmIdentifier::OID_SHA384_WITH_RSA_ENCRYPTION => "sha384WithRSAEncryption",
-        AlgorithmIdentifier::OID_SHA512_WITH_RSA_ENCRYPTION => "sha512WithRSAEncryption",
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA1 => "ecdsa-with-SHA1",
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA224 => "sha224",
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA256 => "sha256",
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA384 => "sha384",
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA512 => "sha512"
+        AlgorithmIdentifier::OID_MD4_WITH_RSA_ENCRYPTION => 'md4',
+        AlgorithmIdentifier::OID_MD5_WITH_RSA_ENCRYPTION => 'md5',
+        AlgorithmIdentifier::OID_SHA1_WITH_RSA_ENCRYPTION => 'sha1',
+        AlgorithmIdentifier::OID_SHA224_WITH_RSA_ENCRYPTION => 'sha224',
+        AlgorithmIdentifier::OID_SHA256_WITH_RSA_ENCRYPTION => 'sha256',
+        AlgorithmIdentifier::OID_SHA384_WITH_RSA_ENCRYPTION => 'sha384',
+        AlgorithmIdentifier::OID_SHA512_WITH_RSA_ENCRYPTION => 'sha512',
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA1 => 'sha1',
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA224 => 'sha224',
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA256 => 'sha256',
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA384 => 'sha384',
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA512 => 'sha512'
         /* @formatter:on */
     );
     
@@ -183,7 +182,7 @@ class OpenSSLCrypto extends Crypto
         $oid = $algo->oid();
         if (!array_key_exists($oid, self::MAP_DIGEST_OID_TO_NAME)) {
             throw new \UnexpectedValueException(
-                sprintf("Digest method %s not supported.", $algo->name()));
+                sprintf('Digest method %s not supported.', $algo->name()));
         }
         return self::MAP_DIGEST_OID_TO_NAME[$oid];
     }
@@ -197,11 +196,11 @@ class OpenSSLCrypto extends Crypto
      */
     const MAP_CIPHER_OID_TO_NAME = array(
         /* @formatter:off */
-        AlgorithmIdentifier::OID_DES_CBC => "DES-CBC", 
-        AlgorithmIdentifier::OID_DES_EDE3_CBC => "DES-EDE3-CBC",
-        AlgorithmIdentifier::OID_AES_128_CBC => "AES-128-CBC",
-        AlgorithmIdentifier::OID_AES_192_CBC => "AES-192-CBC",
-        AlgorithmIdentifier::OID_AES_256_CBC => "AES-256-CBC"
+        AlgorithmIdentifier::OID_DES_CBC => 'DES-CBC', 
+        AlgorithmIdentifier::OID_DES_EDE3_CBC => 'DES-EDE3-CBC',
+        AlgorithmIdentifier::OID_AES_128_CBC => 'AES-128-CBC',
+        AlgorithmIdentifier::OID_AES_192_CBC => 'AES-192-CBC',
+        AlgorithmIdentifier::OID_AES_256_CBC => 'AES-256-CBC'
         /* @formatter:on */
     );
     
@@ -220,12 +219,12 @@ class OpenSSLCrypto extends Crypto
         }
         if (AlgorithmIdentifier::OID_RC2_CBC == $oid) {
             if (!$algo instanceof RC2CBCAlgorithmIdentifier) {
-                throw new \UnexpectedValueException("Not an RC2-CBC algorithm.");
+                throw new \UnexpectedValueException('Not an RC2-CBC algorithm.');
             }
             return $this->_rc2AlgoToCipher($algo);
         }
         throw new \UnexpectedValueException(
-            sprintf("Cipher method %s not supported.", $algo->name()));
+            sprintf('Cipher method %s not supported.', $algo->name()));
     }
     
     /**
@@ -239,13 +238,13 @@ class OpenSSLCrypto extends Crypto
     {
         switch ($algo->effectiveKeyBits()) {
             case 128:
-                return "RC2-CBC";
+                return 'RC2-CBC';
             case 64:
-                return "RC2-64-CBC";
+                return 'RC2-64-CBC';
             case 40:
-                return "RC2-40-CBC";
+                return 'RC2-40-CBC';
         }
         throw new \UnexpectedValueException(
-            $algo->effectiveKeyBits() . " bit RC2 not supported.");
+            $algo->effectiveKeyBits() . ' bit RC2 not supported.');
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types = 1);
 
 namespace Sop\CryptoBridge;
@@ -74,11 +73,11 @@ abstract class Crypto
      */
     public static function getDefault()
     {
-        if (defined("OPENSSL_VERSION_NUMBER")) {
+        if (defined('OPENSSL_VERSION_NUMBER')) {
             return new Crypto\OpenSSLCrypto();
         }
         // @codeCoverageIgnoreStart
-        throw new \RuntimeException("No crypto implementation available.");
+        throw new \RuntimeException('No crypto implementation available.');
         // @codeCoverageIgnoreEnd
     }
 }
