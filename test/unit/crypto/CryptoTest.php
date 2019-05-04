@@ -1,9 +1,14 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types = 1);
+
+use PHPUnit\Framework\TestCase;
 use Sop\CryptoBridge\Crypto;
 
-class CryptoTest extends PHPUnit_Framework_TestCase
+/**
+ * @internal
+ */
+class CryptoTest extends TestCase
 {
     public function testDefault()
     {

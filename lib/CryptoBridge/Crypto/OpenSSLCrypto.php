@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types = 1);
 
 namespace Sop\CryptoBridge\Crypto;
@@ -19,9 +20,44 @@ use Sop\CryptoTypes\Signature\Signature;
 class OpenSSLCrypto extends Crypto
 {
     /**
+     * Mapping from algorithm OID to OpenSSL digest method name.
      *
+     * @internal
+     *
+     * @var array
+     */
+    const MAP_DIGEST_OID_TO_NAME = [
+        AlgorithmIdentifier::OID_MD4_WITH_RSA_ENCRYPTION => 'md4',
+        AlgorithmIdentifier::OID_MD5_WITH_RSA_ENCRYPTION => 'md5',
+        AlgorithmIdentifier::OID_SHA1_WITH_RSA_ENCRYPTION => 'sha1',
+        AlgorithmIdentifier::OID_SHA224_WITH_RSA_ENCRYPTION => 'sha224',
+        AlgorithmIdentifier::OID_SHA256_WITH_RSA_ENCRYPTION => 'sha256',
+        AlgorithmIdentifier::OID_SHA384_WITH_RSA_ENCRYPTION => 'sha384',
+        AlgorithmIdentifier::OID_SHA512_WITH_RSA_ENCRYPTION => 'sha512',
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA1 => 'sha1',
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA224 => 'sha224',
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA256 => 'sha256',
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA384 => 'sha384',
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA512 => 'sha512',
+    ];
+
+    /**
+     * Mapping from algorithm OID to OpenSSL cipher method name.
+     *
+     * @internal
+     *
+     * @var array
+     */
+    const MAP_CIPHER_OID_TO_NAME = [
+        AlgorithmIdentifier::OID_DES_CBC => 'DES-CBC',
+        AlgorithmIdentifier::OID_DES_EDE3_CBC => 'DES-EDE3-CBC',
+        AlgorithmIdentifier::OID_AES_128_CBC => 'AES-128-CBC',
+        AlgorithmIdentifier::OID_AES_192_CBC => 'AES-192-CBC',
+        AlgorithmIdentifier::OID_AES_256_CBC => 'AES-256-CBC',
+    ];
+
+    /**
      * {@inheritdoc}
-     *
      */
     public function sign(string $data, PrivateKeyInfo $privkey_info,
         SignatureAlgorithmIdentifier $algo): Signature
@@ -36,11 +72,9 @@ class OpenSSLCrypto extends Crypto
         }
         return Signature::fromSignatureData($signature, $algo);
     }
-    
+
     /**
-     *
      * {@inheritdoc}
-     *
      */
     public function verify(string $data, Signature $signature,
         PublicKeyInfo $pubkey_info, SignatureAlgorithmIdentifier $algo): bool
@@ -55,11 +89,9 @@ class OpenSSLCrypto extends Crypto
         }
         return 1 == $result ? true : false;
     }
-    
+
     /**
-     *
      * {@inheritdoc}
-     *
      */
     public function encrypt(string $data, string $key,
         CipherAlgorithmIdentifier $algo): string
@@ -74,11 +106,9 @@ class OpenSSLCrypto extends Crypto
         }
         return $result;
     }
-    
+
     /**
-     *
      * {@inheritdoc}
-     *
      */
     public function decrypt(string $data, string $key,
         CipherAlgorithmIdentifier $algo): string
@@ -93,16 +123,17 @@ class OpenSSLCrypto extends Crypto
         }
         return $result;
     }
-    
+
     /**
      * Validate cipher algorithm key size.
      *
      * @param CipherAlgorithmIdentifier $algo
-     * @param string $key
+     * @param string                    $key
+     *
      * @throws \UnexpectedValueException
      */
     protected function _checkCipherKeySize(CipherAlgorithmIdentifier $algo,
-        string $key)
+        string $key): void
     {
         if ($algo instanceof BlockCipherAlgorithmIdentifier) {
             if (strlen($key) != $algo->keySize()) {
@@ -112,13 +143,13 @@ class OpenSSLCrypto extends Crypto
             }
         }
     }
-    
+
     /**
      * Get last OpenSSL error message.
      *
-     * @return string|null
+     * @return null|string
      */
-    protected function _getLastError()
+    protected function _getLastError(): ?string
     {
         // pump error message queue
         $msg = null;
@@ -127,16 +158,18 @@ class OpenSSLCrypto extends Crypto
         }
         return $msg;
     }
-    
+
     /**
      * Check that given signature algorithm supports key of given type.
      *
      * @param SignatureAlgorithmIdentifier $sig_algo Signature algorithm
-     * @param AlgorithmIdentifier $key_algo Key algorithm
+     * @param AlgorithmIdentifier          $key_algo Key algorithm
+     *
      * @throws \UnexpectedValueException If key is not supported
      */
     protected function _checkSignatureAlgoAndKey(
-        SignatureAlgorithmIdentifier $sig_algo, AlgorithmIdentifier $key_algo)
+        SignatureAlgorithmIdentifier $sig_algo,
+        AlgorithmIdentifier $key_algo): void
     {
         if (!$sig_algo->supportsKeyAlgorithm($key_algo)) {
             throw new \UnexpectedValueException(
@@ -145,36 +178,14 @@ class OpenSSLCrypto extends Crypto
                     $sig_algo->name(), $key_algo->name()));
         }
     }
-    
-    /**
-     * Mapping from algorithm OID to OpenSSL digest method name.
-     *
-     * @internal
-     *
-     * @var array
-     */
-    const MAP_DIGEST_OID_TO_NAME = array(
-        /* @formatter:off */
-        AlgorithmIdentifier::OID_MD4_WITH_RSA_ENCRYPTION => 'md4',
-        AlgorithmIdentifier::OID_MD5_WITH_RSA_ENCRYPTION => 'md5',
-        AlgorithmIdentifier::OID_SHA1_WITH_RSA_ENCRYPTION => 'sha1',
-        AlgorithmIdentifier::OID_SHA224_WITH_RSA_ENCRYPTION => 'sha224',
-        AlgorithmIdentifier::OID_SHA256_WITH_RSA_ENCRYPTION => 'sha256',
-        AlgorithmIdentifier::OID_SHA384_WITH_RSA_ENCRYPTION => 'sha384',
-        AlgorithmIdentifier::OID_SHA512_WITH_RSA_ENCRYPTION => 'sha512',
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA1 => 'sha1',
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA224 => 'sha224',
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA256 => 'sha256',
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA384 => 'sha384',
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA512 => 'sha512'
-        /* @formatter:on */
-    );
-    
+
     /**
      * Get OpenSSL digest method for given signature algorithm identifier.
      *
      * @param SignatureAlgorithmIdentifier $algo
+     *
      * @throws \UnexpectedValueException
+     *
      * @return string
      */
     protected function _algoToDigest(SignatureAlgorithmIdentifier $algo): string
@@ -186,29 +197,14 @@ class OpenSSLCrypto extends Crypto
         }
         return self::MAP_DIGEST_OID_TO_NAME[$oid];
     }
-    
-    /**
-     * Mapping from algorithm OID to OpenSSL cipher method name.
-     *
-     * @internal
-     *
-     * @var array
-     */
-    const MAP_CIPHER_OID_TO_NAME = array(
-        /* @formatter:off */
-        AlgorithmIdentifier::OID_DES_CBC => 'DES-CBC', 
-        AlgorithmIdentifier::OID_DES_EDE3_CBC => 'DES-EDE3-CBC',
-        AlgorithmIdentifier::OID_AES_128_CBC => 'AES-128-CBC',
-        AlgorithmIdentifier::OID_AES_192_CBC => 'AES-192-CBC',
-        AlgorithmIdentifier::OID_AES_256_CBC => 'AES-256-CBC'
-        /* @formatter:on */
-    );
-    
+
     /**
      * Get OpenSSL cipher method for given cipher algorithm identifier.
      *
      * @param CipherAlgorithmIdentifier $algo
+     *
      * @throws \UnexpectedValueException
+     *
      * @return string
      */
     protected function _algoToCipher(CipherAlgorithmIdentifier $algo): string
@@ -226,12 +222,14 @@ class OpenSSLCrypto extends Crypto
         throw new \UnexpectedValueException(
             sprintf('Cipher method %s not supported.', $algo->name()));
     }
-    
+
     /**
      * Get OpenSSL cipher method for given RC2 algorithm identifier.
      *
      * @param RC2CBCAlgorithmIdentifier $algo
+     *
      * @throws \UnexpectedValueException
+     *
      * @return string
      */
     protected function _rc2AlgoToCipher(RC2CBCAlgorithmIdentifier $algo): string

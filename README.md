@@ -16,7 +16,7 @@ Key and algorithm information is passed in ASN.1 types implemented in
 
 ## Requirements
 
--   PHP >=7.0
+-   PHP >=7.2
 -   openssl
 -   [sop/crypto-types](https://github.com/sop/crypto-types)
 
