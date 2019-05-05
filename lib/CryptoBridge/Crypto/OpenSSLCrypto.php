@@ -20,25 +20,25 @@ use Sop\CryptoTypes\Signature\Signature;
 class OpenSSLCrypto extends Crypto
 {
     /**
-     * Mapping from algorithm OID to OpenSSL digest method name.
+     * Mapping from algorithm OID to OpenSSL signature method identifier.
      *
      * @internal
      *
      * @var array
      */
-    const MAP_DIGEST_OID_TO_NAME = [
-        AlgorithmIdentifier::OID_MD4_WITH_RSA_ENCRYPTION => 'md4',
-        AlgorithmIdentifier::OID_MD5_WITH_RSA_ENCRYPTION => 'md5',
-        AlgorithmIdentifier::OID_SHA1_WITH_RSA_ENCRYPTION => 'sha1',
-        AlgorithmIdentifier::OID_SHA224_WITH_RSA_ENCRYPTION => 'sha224',
-        AlgorithmIdentifier::OID_SHA256_WITH_RSA_ENCRYPTION => 'sha256',
-        AlgorithmIdentifier::OID_SHA384_WITH_RSA_ENCRYPTION => 'sha384',
-        AlgorithmIdentifier::OID_SHA512_WITH_RSA_ENCRYPTION => 'sha512',
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA1 => 'sha1',
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA224 => 'sha224',
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA256 => 'sha256',
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA384 => 'sha384',
-        AlgorithmIdentifier::OID_ECDSA_WITH_SHA512 => 'sha512',
+    const MAP_DIGEST_OID = [
+        AlgorithmIdentifier::OID_MD4_WITH_RSA_ENCRYPTION => OPENSSL_ALGO_MD4,
+        AlgorithmIdentifier::OID_MD5_WITH_RSA_ENCRYPTION => OPENSSL_ALGO_MD5,
+        AlgorithmIdentifier::OID_SHA1_WITH_RSA_ENCRYPTION => OPENSSL_ALGO_SHA1,
+        AlgorithmIdentifier::OID_SHA224_WITH_RSA_ENCRYPTION => OPENSSL_ALGO_SHA224,
+        AlgorithmIdentifier::OID_SHA256_WITH_RSA_ENCRYPTION => OPENSSL_ALGO_SHA256,
+        AlgorithmIdentifier::OID_SHA384_WITH_RSA_ENCRYPTION => OPENSSL_ALGO_SHA384,
+        AlgorithmIdentifier::OID_SHA512_WITH_RSA_ENCRYPTION => OPENSSL_ALGO_SHA512,
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA1 => OPENSSL_ALGO_SHA1,
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA224 => OPENSSL_ALGO_SHA224,
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA256 => OPENSSL_ALGO_SHA256,
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA384 => OPENSSL_ALGO_SHA384,
+        AlgorithmIdentifier::OID_ECDSA_WITH_SHA512 => OPENSSL_ALGO_SHA512,
     ];
 
     /**
@@ -48,7 +48,7 @@ class OpenSSLCrypto extends Crypto
      *
      * @var array
      */
-    const MAP_CIPHER_OID_TO_NAME = [
+    const MAP_CIPHER_OID = [
         AlgorithmIdentifier::OID_DES_CBC => 'DES-CBC',
         AlgorithmIdentifier::OID_DES_EDE3_CBC => 'DES-EDE3-CBC',
         AlgorithmIdentifier::OID_AES_128_CBC => 'AES-128-CBC',
@@ -186,16 +186,16 @@ class OpenSSLCrypto extends Crypto
      *
      * @throws \UnexpectedValueException
      *
-     * @return string
+     * @return int
      */
-    protected function _algoToDigest(SignatureAlgorithmIdentifier $algo): string
+    protected function _algoToDigest(SignatureAlgorithmIdentifier $algo): int
     {
         $oid = $algo->oid();
-        if (!array_key_exists($oid, self::MAP_DIGEST_OID_TO_NAME)) {
+        if (!array_key_exists($oid, self::MAP_DIGEST_OID)) {
             throw new \UnexpectedValueException(
                 sprintf('Digest method %s not supported.', $algo->name()));
         }
-        return self::MAP_DIGEST_OID_TO_NAME[$oid];
+        return self::MAP_DIGEST_OID[$oid];
     }
 
     /**
@@ -210,8 +210,8 @@ class OpenSSLCrypto extends Crypto
     protected function _algoToCipher(CipherAlgorithmIdentifier $algo): string
     {
         $oid = $algo->oid();
-        if (array_key_exists($oid, self::MAP_CIPHER_OID_TO_NAME)) {
-            return self::MAP_CIPHER_OID_TO_NAME[$oid];
+        if (array_key_exists($oid, self::MAP_CIPHER_OID)) {
+            return self::MAP_CIPHER_OID[$oid];
         }
         if (AlgorithmIdentifier::OID_RC2_CBC == $oid) {
             if (!$algo instanceof RC2CBCAlgorithmIdentifier) {
