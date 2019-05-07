@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 
 use PHPUnit\Framework\TestCase;
+use Sop\ASN1\Element;
 use Sop\CryptoBridge\Crypto\OpenSSLCrypto;
 use Sop\CryptoEncoding\PEM;
 use Sop\CryptoTypes\AlgorithmIdentifier\AlgorithmIdentifier;
@@ -327,7 +328,7 @@ class OpenSSLCryptoTest_UnsupportedCipher extends CipherAlgorithmIdentifier
         return 1;
     }
 
-    protected function _paramsASN1()
+    protected function _paramsASN1(): ?Element
     {
         return null;
     }
@@ -355,7 +356,7 @@ class OpenSSLCryptoTest_InvalidRC2 extends CipherAlgorithmIdentifier
         return 1;
     }
 
-    protected function _paramsASN1()
+    protected function _paramsASN1(): ?Element
     {
         return null;
     }
