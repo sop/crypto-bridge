@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Sop\\CryptoBridge\\": "lib/CryptoBridge"
+            "Sop\\CryptoBridge\\": "lib/CryptoBridge/"
         }
     }
 }
