@@ -19,12 +19,10 @@
             "role": "Developer"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": ">=7.2",
         "ext-openssl": "*",
-        "sop/crypto-types": "dev-master as 0.2.1"
+        "sop/crypto-types": "0.3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.1"
