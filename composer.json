@@ -22,7 +22,7 @@
     "require": {
         "php": ">=7.2",
         "ext-openssl": "*",
-        "sop/crypto-types": "0.3.0"
+        "sop/crypto-types": "^0.3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.1"
