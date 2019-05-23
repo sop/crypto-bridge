@@ -180,7 +180,7 @@ class OpenSSLCrypto extends Crypto
      *
      * @param SignatureAlgorithmIdentifier $algo
      *
-     * @throws \UnexpectedValueException
+     * @throws \UnexpectedValueException If digest method is not supported
      *
      * @return int
      */
@@ -199,7 +199,7 @@ class OpenSSLCrypto extends Crypto
      *
      * @param CipherAlgorithmIdentifier $algo
      *
-     * @throws \UnexpectedValueException
+     * @throws \UnexpectedValueException If cipher method is not supported
      *
      * @return string
      */
@@ -209,7 +209,7 @@ class OpenSSLCrypto extends Crypto
         if (array_key_exists($oid, self::MAP_CIPHER_OID)) {
             return self::MAP_CIPHER_OID[$oid];
         }
-        if (AlgorithmIdentifier::OID_RC2_CBC == $oid) {
+        if (AlgorithmIdentifier::OID_RC2_CBC === $oid) {
             if (!$algo instanceof RC2CBCAlgorithmIdentifier) {
                 throw new \UnexpectedValueException('Not an RC2-CBC algorithm.');
             }
@@ -224,7 +224,7 @@ class OpenSSLCrypto extends Crypto
      *
      * @param RC2CBCAlgorithmIdentifier $algo
      *
-     * @throws \UnexpectedValueException
+     * @throws \UnexpectedValueException If cipher's key size is not supported
      *
      * @return string
      */
